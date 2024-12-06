@@ -54,7 +54,7 @@ export async function getAllV2Pools(client) {
 export function findPool(pools, a, b) {
     pools = pools.filter((p) => p.isFor(a, b))
 
-    if (pools.length == 1) {
+    if (pools.length == 0) {
         throw new Error(`No pools for ${a.toString()}/${b.toString()} found`)
     }
 
