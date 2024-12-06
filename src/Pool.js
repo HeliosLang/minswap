@@ -4,7 +4,7 @@
  */
 
 /**
- * @param {PoolData} data 
+ * @param {PoolData} data
  * @returns {Pool}
  */
 export function makePool(data) {
@@ -21,7 +21,7 @@ class PoolImpl {
     data
 
     /**
-     * @param {PoolData} data 
+     * @param {PoolData} data
      */
     constructor(data) {
         this.data = data
@@ -32,7 +32,9 @@ class PoolImpl {
      * @param {AssetClass} b
      */
     isFor(a, b) {
-        return this.data.assetClassA.isEqual(a) && this.data.assetClassB.isEqual(b)
+        return (
+            this.data.assetClassA.isEqual(a) && this.data.assetClassB.isEqual(b)
+        )
     }
 
     /**
@@ -41,9 +43,11 @@ class PoolImpl {
      * @returns {number}
      */
     getPrice(decimalsA, decimalsB) {
-        const adjustedReserveA = Number(this.data.reserveA)/Math.pow(10, decimalsA)
-        const adjustedReserveB = Number(this.data.reserveB)/Math.pow(10, decimalsB)
-    
-        return adjustedReserveA/adjustedReserveB
+        const adjustedReserveA =
+            Number(this.data.reserveA) / Math.pow(10, decimalsA)
+        const adjustedReserveB =
+            Number(this.data.reserveB) / Math.pow(10, decimalsB)
+
+        return adjustedReserveA / adjustedReserveB
     }
 }

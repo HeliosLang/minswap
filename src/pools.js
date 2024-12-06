@@ -1,4 +1,8 @@
-import { makeAssetClass, makeMintingPolicyHash, makeShelleyAddress, makeValidatorHash } from "@helios-lang/ledger"
+import {
+    makeAssetClass,
+    makeMintingPolicyHash,
+    makeShelleyAddress
+} from "@helios-lang/ledger"
 import { makeCardanoClientHelper } from "@helios-lang/tx-utils"
 import { expectDefined } from "@helios-lang/type-utils"
 import { makePool } from "./Pool.js"
@@ -11,40 +15,46 @@ import { convertUplcDataToPoolData } from "./PoolData.js"
  */
 
 /**
- * @param {CardanoClient} client 
+ * @param {CardanoClient} client
  * @returns {Promise<Pool[]>}
  */
 export async function getAllV2Pools(client) {
     const helper = makeCardanoClientHelper(client)
 
+    const m = client.isMainnet()
+
     const address = makeShelleyAddress(
-        client.isMainnet(),
-        makeValidatorHash("ea07b733d932129c378af627436e7cbc2ef0bf96e0036bb51b3bde6b")
+        m
+            ? "11ea07b733d932129c378af627436e7cbc2ef0bf96e0036bb51b3bde6b52563c5410bff6a0d43ccebb7c37e1f69f5eb260552521adff33b9c2"
+            : "10d6ba9b7509eac866288ff5072d2a18205ac56f744bc82dcd808cb8fe83ec96719dc0591034b78e472d6f477446261fec4bc517fa4d047f02"
     )
-
-    let utxos = await helper.getUtxos(address)
-
-    const poolAssetClass = makeAssetClass(
-        makeMintingPolicyHash("f5808c2c990d86da54bfc97d89cee6efa20cd8461616359478d96b4c"),
+    const assetClass = makeAssetClass(
+        makeMintingPolicyHash(
+            m
+                ? "f5808c2c990d86da54bfc97d89cee6efa20cd8461616359478d96b4c"
+                : "d6aae2059baee188f74917493cf7637e679cd219bdfbbf4dcbeb1d0b"
+        ),
         "4d5350"
     )
 
-    utxos = utxos.filter(utxo => utxo.value.assetClasses.some(ac => ac.isEqual(poolAssetClass)))
+    const utxos = await helper.getUtxosWithAssetClass(address, assetClass)
 
-    return utxos.map(utxo => makePool(convertUplcDataToPoolData(expectDefined(utxo.datum?.data))))
+    return utxos.map((utxo) =>
+        makePool(convertUplcDataToPoolData(expectDefined(utxo.datum?.data)))
+    )
 }
 
 /**
  * If multiple are found, pick the one with the largest total liquidity
- * @param {Pool[]} pools 
+ * @param {Pool[]} pools
  * @param {AssetClass} a
  * @param {AssetClass} b
  * @returns {Pool}
  */
 export function findPool(pools, a, b) {
-    pools = pools.filter(p => p.isFor(a, b))
+    pools = pools.filter((p) => p.isFor(a, b))
 
-    if (pools.length) {
+    if (pools.length == 1) {
         throw new Error(`No pools for ${a.toString()}/${b.toString()} found`)
     }
 

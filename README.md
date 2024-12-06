@@ -1,11 +1,12 @@
 # minswap
+
 WASM-free library for querying Minswap DEX token prices
 
 Minswap prices are based on the ratio of liquidity pool reserves. These reserves are tracked in the datum of a Pool UTxO.
 
 ## V2 Mainnet
 
-For V2 pools, these pool UTxOs are located at the validator with hash:       ea07b733d932129c378af627436e7cbc2ef0bf96e0036bb51b3bde6b
+For V2 pools, these pool UTxOs are located at the validator with hash: ea07b733d932129c378af627436e7cbc2ef0bf96e0036bb51b3bde6b
 
 Each Pool UTxO contains the following a token with the following assetclass: f5808c2c990d86da54bfc97d89cee6efa20cd8461616359478d96b4c.4d5350
 (tokenname `MSP` i.e. MinSwapPool)
