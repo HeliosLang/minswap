@@ -28,6 +28,22 @@ class PoolImpl {
     }
 
     /**
+     * @returns {Pool}
+     */
+    invert() {
+        return makePool({
+            assetClassA: this.data.assetClassB,
+            assetClassB: this.data.assetClassA,
+            totalLiquidity: this.data.totalLiquidity,
+            reserveA: this.data.reserveB,
+            reserveB: this.data.reserveA,
+            baseFeeA: this.data.baseFeeB,
+            baseFeeB: this.data.baseFeeA,
+            feeSharing: this.data.feeSharing
+        })
+    }
+
+    /**
      * @param {AssetClass} a
      * @param {AssetClass} b
      */

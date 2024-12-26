@@ -54,11 +54,18 @@ export async function getAllV2Pools(client) {
 export function findPool(pools, a, b) {
     pools = pools.filter((p) => p.isFor(a, b))
 
+    const invertedPools = pools.filter((p) => p.isFor(b, a))
+
+    pools = pools.concat(invertedPools.map((p) => p.invert()))
+
     if (pools.length == 0) {
         throw new Error(`No pools for ${a.toString()}/${b.toString()} found`)
     }
 
-    pools.sort((p0, p1) => Number(p1) - Number(p0))
+    pools.sort(
+        (p0, p1) =>
+            Number(p1.data.totalLiquidity) - Number(p0.data.totalLiquidity)
+    )
 
     return pools[0]
 }
