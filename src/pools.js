@@ -12,7 +12,7 @@ import { convertUplcDataToPoolData } from "./PoolData.js"
 
 /**
  * @import { AssetClass, PubKeyHash } from "@helios-lang/ledger"
- * @import { CardanoClient } from "@helios-lang/tx-utils"
+ * @import { ReadonlyCardanoClient } from "@helios-lang/tx-utils"
  * @import { Pool } from "./index.js"
  */
 
@@ -48,7 +48,7 @@ const PREPROD_POOL_DATA_STAKING_CREDENTIALS = [
 ]
 
 /**
- * @param {CardanoClient} client
+ * @param {ReadonlyCardanoClient} client
  * @returns {Promise<Pool[]>}
  */
 export async function getAllV2Pools(client) {
@@ -103,7 +103,11 @@ export async function getAllV2Pools(client) {
         }
     }
     return utxos.map((utxo) =>
-        makePool(convertUplcDataToPoolData(expectDefined(utxo.datum?.data, "pool data undefined")))
+        makePool(
+            convertUplcDataToPoolData(
+                expectDefined(utxo.datum?.data, "pool data undefined")
+            )
+        )
     )
 }
 
