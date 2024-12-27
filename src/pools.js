@@ -90,7 +90,7 @@ export async function getAllV2Pools(client) {
     ).reduce((prev, lst) => prev.concat(lst), [])
 
     return utxos.map((utxo) =>
-        makePool(convertUplcDataToPoolData(expectDefined(utxo.datum?.data)))
+        makePool(convertUplcDataToPoolData(expectDefined(utxo.datum?.data, "pool data undefined")))
     )
 }
 
