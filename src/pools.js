@@ -89,6 +89,19 @@ export async function getAllV2Pools(client) {
         )
     ).reduce((prev, lst) => prev.concat(lst), [])
 
+    /**
+     * @type {Pool[]}
+     */
+    const pools = []
+
+    // only add utxos with defined pool data
+    for (let utxo of utxos) {
+        if (utxo.datum?.data) {
+            pools.push(makePool(convertUplcDataToPoolData(utxo.datum.data)))
+        } else {
+            console.error(`utxo ${utxo.id.toString()} is missing pool datum`)
+        }
+    }
     return utxos.map((utxo) =>
         makePool(convertUplcDataToPoolData(expectDefined(utxo.datum?.data, "pool data undefined")))
     )

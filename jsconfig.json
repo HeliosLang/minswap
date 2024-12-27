@@ -10,7 +10,7 @@
         "moduleResolution": "nodenext",
         "module": "nodenext",
         "target": "esnext",
-        "lib": ["es6"]
+        "lib": ["es6", "dom"]
     },
     "exclude": ["node_modules", "**/*.d.ts"],
     "include": ["src/**/*.js"]
