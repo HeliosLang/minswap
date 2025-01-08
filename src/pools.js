@@ -102,13 +102,8 @@ export async function getAllV2Pools(client) {
             console.error(`utxo ${utxo.id.toString()} is missing pool datum`)
         }
     }
-    return utxos.map((utxo) =>
-        makePool(
-            convertUplcDataToPoolData(
-                expectDefined(utxo.datum?.data, "pool data undefined")
-            )
-        )
-    )
+
+    return pools
 }
 
 /**
