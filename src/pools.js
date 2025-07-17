@@ -11,7 +11,7 @@ import { makePool } from "./Pool.js"
 import { convertUplcDataToPoolData } from "./PoolData.js"
 
 /**
- * @import { AssetClass, PubKeyHash } from "@helios-lang/ledger"
+ * @import { AssetClass, MintingPolicyHash, PubKeyHash } from "@helios-lang/ledger"
  * @import { ReadonlyCardanoClient } from "@helios-lang/tx-utils"
  * @import { Pool } from "./index.js"
  */
@@ -48,6 +48,18 @@ const PREPROD_POOL_DATA_STAKING_CREDENTIALS = [
 ]
 
 /**
+ * @param {boolean} isMainnet
+ * @returns {MintingPolicyHash}
+ */
+export function makePrincipalMintingPolicyHash(isMainnet) {
+    return makeMintingPolicyHash(
+        isMainnet
+            ? "f5808c2c990d86da54bfc97d89cee6efa20cd8461616359478d96b4c"
+            : "d6aae2059baee188f74917493cf7637e679cd219bdfbbf4dcbeb1d0b"
+    )
+}
+
+/**
  * @param {ReadonlyCardanoClient} client
  * @returns {Promise<Pool[]>}
  */
@@ -73,11 +85,7 @@ export async function getAllV2Pools(client) {
           )
 
     const assetClass = makeAssetClass(
-        makeMintingPolicyHash(
-            m
-                ? "f5808c2c990d86da54bfc97d89cee6efa20cd8461616359478d96b4c"
-                : "d6aae2059baee188f74917493cf7637e679cd219bdfbbf4dcbeb1d0b"
-        ),
+        makePrincipalMintingPolicyHash(m),
         "4d5350"
     )
 
