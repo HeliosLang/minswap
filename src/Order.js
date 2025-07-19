@@ -1,4 +1,5 @@
 import {
+    ADA,
     convertSpendingCredentialToUplcData,
     makeAssetClass,
     makeInlineTxOutputDatum,
@@ -72,9 +73,13 @@ export async function makeSwapOrderTx(args) {
         isMainnet
     })
 
-    const inputTokens = makeTokenValue(args.inputAsset, args.inputQuantity)
-    const envelopeAmount = makeValue(2_700_000n)
-    const inputValue = envelopeAmount.add(inputTokens.value)
+    const inputTokens = args.inputAsset.isEqual(ADA)
+        ? makeValue(args.inputQuantity)
+        : makeTokenValue(args.inputAsset, args.inputQuantity).value
+    const envelopeAmount = args.inputAsset.isEqual(ADA)
+        ? makeValue(0)
+        : makeValue(2_700_000n)
+    const inputValue = envelopeAmount.add(inputTokens)
 
     const [toSpend, spare] = selectSmallestFirst({
         allowSelectingUninvolvedAssets: true
