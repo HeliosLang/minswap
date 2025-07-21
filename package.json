@@ -1,6 +1,6 @@
 {
     "name": "@helios-lang/minswap",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "WASM-free library for querying Minswap prices",
     "main": "src/index.js",
     "types": "types/index.d.ts",
