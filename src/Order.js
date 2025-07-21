@@ -149,14 +149,16 @@ export async function makeSwapOrderTx(args) {
     const b = makeTxBuilder({
         isMainnet
     })
+    const depositLovelace = 2_000_000n
+    const batcherLovelace = 700_000n
 
     const inputTokens = args.inputAsset.isEqual(ADA)
         ? makeValue(args.inputQuantity)
         : makeTokenValue(args.inputAsset, args.inputQuantity).value
-    const envelopeAmount = args.inputAsset.isEqual(ADA)
-        ? makeValue(0)
-        : makeValue(2_700_000n)
-    const inputValue = envelopeAmount.add(inputTokens)
+
+    // envelope is 2 ADA deposit plus 0.7 ADA batcher fee
+    const envelopeAmount = makeValue(depositLovelace + batcherLovelace)
+    const inputValue = envelopeAmount.add(inputTokens) // envelope is added regardless if inputTokens is ADA
 
     const [toSpend, spare] = selectSmallestFirst({
         allowSelectingUninvolvedAssets: true
@@ -185,7 +187,7 @@ export async function makeSwapOrderTx(args) {
                         makePrincipalMintingPolicyHash(isMainnet),
                         toBytes(args.lpTokenName)
                     ),
-                    maxBatcherFee: 700_000n, // lovelace taken from the envelope amount?
+                    maxBatcherFee: batcherLovelace, // lovelace taken from the envelope amount
                     swapConfig: {
                         direction: args.direction,
                         orderAmount: args.inputQuantity,
