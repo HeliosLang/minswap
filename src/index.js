@@ -1,4 +1,4 @@
-export { makeSwapOrderTx } from "./Order.js"
+export { makeCancelOrderTx, makeSwapOrderTx } from "./Order.js"
 export { makePool } from "./Pool.js"
 export { convertUplcDataToPoolData } from "./PoolData.js"
 export { findPool, getAllV2Pools } from "./pools.js"
@@ -90,6 +90,14 @@ export { findPool, getAllV2Pools } from "./pools.js"
  * These UTXOs are also used for fees.
  *
  * @prop {bigint} minReceived
+ */
+
+/**
+ * @typedef {object} CancelOrderArgs
+ * @prop {TxInput} order
+ * @prop {ShelleyAddress} changeAddress
+ * @prop {NetworkParams} params
+ * @prop {TxInput[]} spareUTXOs
  */
 
 /**
