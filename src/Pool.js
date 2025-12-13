@@ -1,14 +1,15 @@
 /**
- * @import { AssetClass } from "@helios-lang/ledger"
+ * @import { AssetClass, Value } from "@helios-lang/ledger"
  * @import { Pool, PoolData } from "./index.js"
  */
 
 /**
  * @param {PoolData} data
+ * @param {Value} value
  * @returns {Pool}
  */
-export function makePool(data) {
-    return new PoolImpl(data)
+export function makePool(data, value) {
+    return new PoolImpl(data, value)
 }
 
 /**
@@ -21,26 +22,36 @@ class PoolImpl {
     data
 
     /**
-     * @param {PoolData} data
+     * @type {Value}
      */
-    constructor(data) {
+    value
+
+    /**
+     * @param {PoolData} data
+     * @param {Value} value
+     */
+    constructor(data, value) {
         this.data = data
+        this.value = value
     }
 
     /**
      * @returns {Pool}
      */
     invert() {
-        return makePool({
-            assetClassA: this.data.assetClassB,
-            assetClassB: this.data.assetClassA,
-            totalLiquidity: this.data.totalLiquidity,
-            reserveA: this.data.reserveB,
-            reserveB: this.data.reserveA,
-            baseFeeA: this.data.baseFeeB,
-            baseFeeB: this.data.baseFeeA,
-            feeSharing: this.data.feeSharing
-        })
+        return makePool(
+            {
+                assetClassA: this.data.assetClassB,
+                assetClassB: this.data.assetClassA,
+                totalLiquidity: this.data.totalLiquidity,
+                reserveA: this.data.reserveB,
+                reserveB: this.data.reserveA,
+                baseFeeA: this.data.baseFeeB,
+                baseFeeB: this.data.baseFeeA,
+                feeSharing: this.data.feeSharing
+            },
+            this.value
+        )
     }
 
     /**

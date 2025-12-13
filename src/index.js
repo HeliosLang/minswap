@@ -1,7 +1,7 @@
 export { makeCancelOrderTx, makeSwapOrderTx } from "./Order.js"
 export { makePool } from "./Pool.js"
 export { convertUplcDataToPoolData } from "./PoolData.js"
-export { findPool, getAllV2Pools } from "./pools.js"
+export { findPool, findPoolByLPAssetClass, getAllV2Pools } from "./pools.js"
 
 /**
  * @import { BytesLike } from "@helios-lang/codec-utils"
@@ -11,7 +11,8 @@ export { findPool, getAllV2Pools } from "./pools.js"
  *   PubKeyHash,
  *   ShelleyAddress,
  *   SpendingCredential,
- *   TxInput
+ *   TxInput,
+ *   Value
  * } from "@helios-lang/ledger"
  * @import { UplcData } from "@helios-lang/uplc"
  */
@@ -116,6 +117,9 @@ export { findPool, getAllV2Pools } from "./pools.js"
  * @typedef {object} Pool
  * @prop {PoolData} data
  * On-chain data related to Pool
+ *
+ * @prop {Value} value
+ * On-chain value contained in current Pool UTxO
  *
  * @prop {(a: AssetClass, b: AssetClass) => boolean}  isFor
  * Note: returns false if a is b and b is a are swapped (such cases must be checked by caller)

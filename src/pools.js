@@ -105,7 +105,9 @@ export async function getAllV2Pools(client) {
     // only add utxos with defined pool data
     for (let utxo of utxos) {
         if (utxo.datum?.data) {
-            pools.push(makePool(convertUplcDataToPoolData(utxo.datum.data)))
+            pools.push(
+                makePool(convertUplcDataToPoolData(utxo.datum.data), utxo.value)
+            )
         } else {
             console.error(`utxo ${utxo.id.toString()} is missing pool datum`)
         }
@@ -130,6 +132,28 @@ export function findPool(pools, a, b) {
 
     if (pools.length == 0) {
         throw new Error(`No pools for ${a.toString()}/${b.toString()} found`)
+    }
+
+    pools.sort(
+        (p0, p1) =>
+            Number(p1.data.totalLiquidity) - Number(p0.data.totalLiquidity)
+    )
+
+    return pools[0]
+}
+
+/**
+ * @param {Pool[]} pools
+ * @param {AssetClass} lpAssetClass
+ * @returns {Pool}
+ */
+export function findPoolByLPAssetClass(pools, lpAssetClass) {
+    pools = pools.filter((p) => p.value.assets.hasAssetClass(lpAssetClass))
+
+    if (pools.length == 0) {
+        throw new Error(
+            `No pools with LP asset class ${lpAssetClass.toString()} found`
+        )
     }
 
     pools.sort(
