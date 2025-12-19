@@ -200,7 +200,8 @@ export async function makeSwapOrderTx(args) {
         .build({
             networkParams: args.params,
             spareUtxos: spare,
-            changeAddress: args.changeAddress
+            changeAddress: args.changeAddress,
+            allowDirtySpareInputs: true
         })
 
     return tx
